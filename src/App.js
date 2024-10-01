@@ -108,6 +108,7 @@ function App() {
 			Autosave,
 			BlockQuote,
 			Bold,
+			PaddingPlugin,
 			Essentials,
 			FullPage,
 			FindAndReplace,
