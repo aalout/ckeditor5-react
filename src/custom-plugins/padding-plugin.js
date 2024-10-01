@@ -7,9 +7,11 @@ export default class PaddingPlugin extends Plugin {
 
     this.editor.commands.add('padding', {
       execute: () => {
-        this.setPadding(10);
+        console.log('Execute padding command');
+        this.setPadding(100);
       },
       refresh: () => {
+        console.log('Refresh padding command');
         const selectedElement = this.editor.model.document.selection.getSelectedElement();
         this.isEnabled = !!selectedElement;
       }
@@ -25,6 +27,7 @@ export default class PaddingPlugin extends Plugin {
       });
 
       button.on('execute', () => {
+        console.log('Button execute');
         this.editor.execute('padding');
         this.editor.editing.view.focus();
       });
@@ -32,32 +35,33 @@ export default class PaddingPlugin extends Plugin {
       return button;
     });
   }
+
   setPadding(value) {
+    console.log('Set padding');
     const editor = this.editor;
     const selection = editor.model.document.selection;
     const firstPosition = selection.getFirstPosition();
     const lastPosition = selection.getLastPosition();
-  
-    console.log('Selected element:', firstPosition, lastPosition);
-  
+
     if (firstPosition && lastPosition) {
+      console.log('Selection found');
       const firstElement = firstPosition.parent;
       const lastElement = lastPosition.parent;
-  
+
       if (firstElement && lastElement) {
+        console.log('Elements found');
         editor.model.change((writer) => {
-          const div = writer.createElement('div');
-          const range = writer.createRangeIn(firstElement);
-          range.end = writer.createPositionAfter(lastElement);
-  
-          writer.wrap(div, range);
-          writer.setAttribute('style', `padding: ${value}px`, div);
+          console.log('Change model');
+          const newStyle = `"margin-left: ${value}px"`;
+          writer.setAttribute('style=', newStyle, firstElement);
+          console.log('New style:', newStyle);
+          console.log('Element style after change:', firstElement.getAttribute('style'));
         });
       } else {
-        console.warn('No element selected to apply padding.');
+        console.log('No elements found');
       }
     } else {
-      console.warn('No element selected to apply padding.');
+      console.log('No selection found');
     }
   }
 }
