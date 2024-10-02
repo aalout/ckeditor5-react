@@ -10,9 +10,27 @@ class StyleCommand extends Command {
 
         model.change(writer => {
             const range = selection.getFirstRange();
-            for (const item of range.getItems()) {
-                if (item.is('textProxy')) {
-                    writer.setAttribute('customStyle', true, item);
+            const elements = Array.from(range.getItems()).filter(item => item.is('element'));
+
+            if (elements.length > 0) {
+                const divElement = writer.createElement('div', {
+                    customStyle: true,
+                    styles: {
+                        'font-weight': 'bold',
+                        'color': 'red',
+                        'padding': '100px',
+                        'border': '1px solid red',
+                        'background-color': 'gray',
+                        'display': 'flex',
+                    }
+                });
+
+                writer.wrap(range, divElement);
+            } else {
+                for (const item of range.getItems()) {
+                    if (item.is('textProxy')) {
+                        writer.setAttribute('customStyle', true, item);
+                    }
                 }
             }
         });
@@ -51,16 +69,21 @@ export default class CustomStylePlugin extends Plugin {
         editor.conversion.attributeToElement({
             model: 'customStyle',
             view: {
-                name: 'span',
+                name: 'div',
                 styles: {
                     'font-weight': 'bold',
                     'color': 'red',
                     'padding': '100px',
-                    'display': 'block',
                     'border': '1px solid red',
                     'background-color': 'gray',
+                    'display': 'flex',
                 }
             }
+        });
+
+        editor.model.schema.register('customStyle', {
+            allowWhere: '$block',
+            allowContent: 'table paragraph widget'
         });
 
         editor.model.schema.extend('$text', { allowAttributes: 'customStyle' });

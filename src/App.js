@@ -60,11 +60,24 @@ function App() {
     setData(data)
   }
   useEffect(() => {
-    if (editor) {
-      editor.plugins.add(PaddingPlugin);
-	  editor.plugins.add(CustomStylePlugin)
-    }
+	if (editor) {
+	  editor.plugins.add(PaddingPlugin);
+	  editor.plugins.add(CustomStylePlugin);
+	  editor.plugins.get( 'TableUtils' ).on( 'afterNewRow', ( evt, data ) => {
+		const table = data.table;
+		const row = data.row;
+		const columns = table.getColumns();
+	  
+		editor.model.change( writer => {
+		  columns.forEach( ( column ) => {
+			const cell = row.getCell( column );
+			writer.setAttribute( 'style', 'width: 8.33%', cell );
+		  } );
+		} );
+	  } );
+	}
   }, [editor]);
+
 
   
   const editorConfig = {
@@ -106,6 +119,7 @@ function App() {
 		plugins: [
 			Image, ImageToolbar, ImageCaption, ImageStyle, ImageResize, LinkImage,
 			AccessibilityHelp,
+			TableProperties,
 			MediaEmbed,
 			Autoformat,
 			CustomStylePlugin,
@@ -214,7 +228,7 @@ function App() {
 				}
 			]
 		},
-		initialData: '<div></div>',
+		initialData: '<figure class="table" style="width:100%;"><table class="ck-table-resized" style="table-layout:fixed;"><colgroup><col style="width:8.33%;"><col style="width:8.33%;"><col style="width:8.33%;"><col style="width:8.33%;"><col style="width:8.33%;"><col style="width:8.33%;"><col style="width:8.33%;"><col style="width:8.33%;"><col style="width:8.33%;"><col style="width:8.33%;"><col style="width:8.33%;"><col style="width:8.37%;"></colgroup><tbody><tr><td style="width:8.33%;">&nbsp;</td><td style="width:8.33%;">&nbsp;</td><td style="width:8.33%;">&nbsp;</td><td style="width:8.33%;">&nbsp;</td><td style="width:8.33%;">&nbsp;</td><td style="width:8.33%;">&nbsp;</td><td style="width:8.33%;">&nbsp;</td><td style="width:8.33%;">&nbsp;</td><td style="width:8.33%;">&nbsp;</td><td style="width:8.33%;">&nbsp;</td><td style="width:8.33%;">&nbsp;</td><td style="width:8.33%;">&nbsp;</td></tr></tbody></table></figure>',
 		// initialData: '<h1>&nbsp;</h1><figure class="table" style="height:100%;width:100%;"><table class="ck-table-resized" style="border-style:none;"><colgroup><col style="width:8.32%;"><col style="width:8.32%;"><col style="width:8.32%;"><col style="width:8.32%;"><col style="width:8.32%;"><col style="width:8.32%;"><col style="width:8.32%;"><col style="width:8.32%;"><col style="width:8.32%;"><col style="width:8.32%;"><col style="width:8.32%;"><col style="width:8.48%;"></colgroup><tbody><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td style="height:100vh;">&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table></figure>',
     // initialData: '<h1>Что умеет CKEditor в базовой версии?</h1><h3>Умеет писать заголовки</h3><p>Умеет делать текст <strong>таким,</strong> <i>таким </i>и <u>таким,</u> или сразу вот <i><strong><u>таким</u></strong></i></p><p>Умеет делать таблицы</p><figure class="table"><table><tbody><tr><td>Правда под это нужны стили…</td><td>да</td><td>точно</td></tr><tr><td>Ведь в выводе снизу</td><td>нет никаких</td><td>border</td></tr><tr><td>и в целом таблица</td><td>не</td><td>стилизована</td></tr></tbody></table></figure><p>Умеет прикреплять <a href="ссылка">ссылки</a></p><div class="raw-html-embed">Можно вставить html код <div> <h2 style="color:orange; text-shadow: #FC0 1px 0 10px;">И здесь можно разогнаться</h2> </div></div><p style="margin-left:160px;">Умеет добавлять отступы</p><p>Да в целом можно редактировать все, что можно редактировать</p><p>в html/css, как через код, так и через настраиваемою панель сверху</p><pre><code class="language-javascript">const CKEditor = "Умеет вставлять код"</code></pre>',
 		link: {
@@ -238,31 +252,21 @@ function App() {
 		}
 	};
   return (
-    <div className="App">
-      <h2>
-        CKEditor React тест
-      </h2>
-      <div style={{display: 'inline-block', textAlign:'left'}}>
-        <div style={{display:'flex', alignItems:'center', justifyContent: 'center', gap: '200px'}}>
-          <h2 style={{minWidth: '200px'}}>Редактор</h2>
-          <div>
-        <div style={{width: '700px', display: 'inline-block', textAlign:'right', marginBottom: '5px'}}>
-          <button onClick={() => showData(!addedData)}>{addedData ? 'Скрыть' : 'Показать'}</button>
-        </div>
-        <CKEditor style={{minWidth: '785px', maxWidth: '785px'}} editor={ClassicEditor} config={editorConfig} data={addData} onChange={handleChange}  />
-        </div>
-        </div>
-        <div style={{display:'flex', alignItems:'center', justifyContent: 'center', gap: '200px'}}>
-          <h2 style={{minWidth: '200px'}}>Вывод</h2>
-        <div style={{border: '1px solid rgba(0,0,0,0.2)', padding: '10px', minWidth: '785px', maxWidth: '785px'}}>
+<div className="App">
+      <h2>CKEditor React тест</h2>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <CKEditor
+          style={{ width: '100%', height: '100vh' }}
+          editor={ClassicEditor}
+          config={editorConfig}
+          data={addData}
+          onChange={handleChange}
+        />
+        <div style={{ width: '100%', height: '100vh', border: '1px solid rgba(0,0,0,0.2)', padding: '10px' }}>
           {addedData ? ReactHtmlParser(addData) : ''}
         </div>
-        </div>
-        <div style={{display:'flex', alignItems:'center', justifyContent: 'center', gap: '200px'}}>
-        <h2 style={{minWidth: '200px'}}>Вывод HTML</h2>
-        <div style={{border: '1px solid rgba(0,0,0,0.2)', padding: '10px', borderTop: 'none', minHeight:'120px', minWidth: '785px', maxWidth: '785px'}}>
+        <div style={{ width: '100%', height: '100vh', border: '1px solid rgba(0,0,0,0.2)', padding: '10px', borderTop: 'none' }}>
           {addedData ? addData : ''}
-        </div>
         </div>
       </div>
     </div>

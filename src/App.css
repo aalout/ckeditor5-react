@@ -24,6 +24,17 @@
   color: white;
 }
 
+table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+table td {
+  width: 8.33%;
+  overflow: hidden;
+  word-break: break-all;
+}
+
 .App-link {
   color: #61dafb;
 }
