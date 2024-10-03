@@ -10,6 +10,7 @@ import {
 	Bold,
 	Essentials,
 	FullPage,
+	Font,
 	GeneralHtmlSupport,
 	Heading,
 	HtmlComment,
@@ -19,6 +20,7 @@ import {
 	Italic,
 	Link,
 	Paragraph,
+	Alignment,
 	SelectAll,
 	ShowBlocks,
 	SourceEditing,
@@ -77,6 +79,7 @@ function App() {
 	  } );
 	}
   }, [editor]);
+  
 
 
   
@@ -96,6 +99,7 @@ function App() {
 				'italic',
 				'underline',
 				'|',
+				'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 				'|',
 				'link',
 				'insertTable',
 				'blockQuote',
@@ -111,6 +115,7 @@ function App() {
 		'horizontalLine',
 		'insertImage',
 		'|',
+		'alignment',
 		'padding',
 		'customStyle',
 			],
@@ -126,12 +131,14 @@ function App() {
 			Autosave,
 			BlockQuote,
 			Bold,
+			Font,
 			PaddingPlugin,
 			Essentials,
 			FullPage,
 			FindAndReplace,
 			GeneralHtmlSupport,
 			Heading,
+			Alignment,
 			HtmlComment,
       CodeBlock,
 			HtmlEmbed,
@@ -172,6 +179,9 @@ function App() {
             insert: {
                 type: 'auto'
             }
+        },
+		alignment: {
+            options: [ 'left', 'right', 'center', 'justify' ]
         },
 		heading: {
 			options: [
@@ -228,7 +238,7 @@ function App() {
 				}
 			]
 		},
-		initialData: '<figure class="table" style="width:100%;"><table class="ck-table-resized" style="table-layout:fixed;"><colgroup><col style="width:8.33%;"><col style="width:8.33%;"><col style="width:8.33%;"><col style="width:8.33%;"><col style="width:8.33%;"><col style="width:8.33%;"><col style="width:8.33%;"><col style="width:8.33%;"><col style="width:8.33%;"><col style="width:8.33%;"><col style="width:8.33%;"><col style="width:8.37%;"></colgroup><tbody><tr><td style="width:8.33%;">&nbsp;</td><td style="width:8.33%;">&nbsp;</td><td style="width:8.33%;">&nbsp;</td><td style="width:8.33%;">&nbsp;</td><td style="width:8.33%;">&nbsp;</td><td style="width:8.33%;">&nbsp;</td><td style="width:8.33%;">&nbsp;</td><td style="width:8.33%;">&nbsp;</td><td style="width:8.33%;">&nbsp;</td><td style="width:8.33%;">&nbsp;</td><td style="width:8.33%;">&nbsp;</td><td style="width:8.33%;">&nbsp;</td></tr></tbody></table></figure>',
+		initialData: '<figure class="table" style="width:100%;"><table class="ck-table-resized" style="table-layout:fixed;"><colgroup><col style="width:8.33%;"><col style="width:8.33%;"><col style="width:8.33%;"><col style="width:8.33%;"><col style="width:8.33%;"><col style="width:8.33%;"><col style="width:8.33%;"><col style="width:8.33%;"><col style="width:8.33%;"><col style="width:8.33%;"><col style="width:8.33%;"><col style="width:8.37%;"></colgroup><tbody><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td style="background-color:hsl(60, 75%, 60%);text-align:center;" colspan="5" rowspan="4"><span class="text-big" style="background-color:hsl(90, 75%, 60%);color:hsl(270, 75%, 60%);font-family:"Courier New", Courier, monospace;"><strong>wewewewewewewewqq</strong></span></td><td>&nbsp;</td><td style="background-color:hsl(60, 75%, 60%);padding:20px;text-align:center;" colspan="2" rowspan="4"><div style="background-color:gray;border:1px solid red;color:red;display:flex;font-weight:bold;padding:100px;">ewwwww</div></td><td>&nbsp;</td><td style="background-color:hsl(60, 75%, 60%);text-align:center;" rowspan="4"><hr><h1>wew</h1></td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td style="width:8.33%;">&nbsp;</td><td style="width:8.33%;">&nbsp;</td><td style="width:8.33%;">&nbsp;</td><td style="width:8.33%;">&nbsp;</td><td style="width:8.33%;">&nbsp;</td><td style="width:8.33%;">&nbsp;</td><td style="width:8.33%;">&nbsp;</td><td style="width:8.33%;">&nbsp;</td><td style="width:8.33%;">&nbsp;</td><td style="width:8.33%;">&nbsp;</td><td style="width:8.33%;">&nbsp;</td><td style="width:8.33%;">&nbsp;</td></tr><tr><td>&nbsp;</td><td style="background-color:hsl(0, 0%, 30%);" colspan="8" rowspan="3"><hr><p style="text-align:center;">wew</p></td><td>&nbsp;</td><td style="background-color:hsl(0, 0%, 30%);text-align:justify;" rowspan="3"><span style="color:hsl(0, 0%, 100%);font-family:"Courier New", Courier, monospace;">wewwwqge</span></td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table></figure>',
 		// initialData: '<h1>&nbsp;</h1><figure class="table" style="height:100%;width:100%;"><table class="ck-table-resized" style="border-style:none;"><colgroup><col style="width:8.32%;"><col style="width:8.32%;"><col style="width:8.32%;"><col style="width:8.32%;"><col style="width:8.32%;"><col style="width:8.32%;"><col style="width:8.32%;"><col style="width:8.32%;"><col style="width:8.32%;"><col style="width:8.32%;"><col style="width:8.32%;"><col style="width:8.48%;"></colgroup><tbody><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td style="height:100vh;">&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table></figure>',
     // initialData: '<h1>Что умеет CKEditor в базовой версии?</h1><h3>Умеет писать заголовки</h3><p>Умеет делать текст <strong>таким,</strong> <i>таким </i>и <u>таким,</u> или сразу вот <i><strong><u>таким</u></strong></i></p><p>Умеет делать таблицы</p><figure class="table"><table><tbody><tr><td>Правда под это нужны стили…</td><td>да</td><td>точно</td></tr><tr><td>Ведь в выводе снизу</td><td>нет никаких</td><td>border</td></tr><tr><td>и в целом таблица</td><td>не</td><td>стилизована</td></tr></tbody></table></figure><p>Умеет прикреплять <a href="ссылка">ссылки</a></p><div class="raw-html-embed">Можно вставить html код <div> <h2 style="color:orange; text-shadow: #FC0 1px 0 10px;">И здесь можно разогнаться</h2> </div></div><p style="margin-left:160px;">Умеет добавлять отступы</p><p>Да в целом можно редактировать все, что можно редактировать</p><p>в html/css, как через код, так и через настраиваемою панель сверху</p><pre><code class="language-javascript">const CKEditor = "Умеет вставлять код"</code></pre>',
 		link: {
@@ -254,7 +264,7 @@ function App() {
   return (
 <div className="App">
       <h2>CKEditor React тест</h2>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <div style={{ display: 'flex', flexDirection: 'column'}}>
         <CKEditor
           style={{ width: '100%', height: '100vh' }}
           editor={ClassicEditor}
